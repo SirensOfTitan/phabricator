@@ -22,11 +22,6 @@ RUN apt-get update \
 
 # install the PHP extensions we need
 RUN set -ex; \
-    \
-    if command -v a2enmod; then \
-        a2enmod rewrite; \
-    fi; \
-    \
     savedAptMark="$(apt-mark showmanual)"; \
     \
     apt-get update; \
@@ -34,14 +29,14 @@ RUN set -ex; \
       libcurl4-gnutls-dev \
       libjpeg62-turbo-dev \
       libpng-dev \
+      libonig-dev \
       libfreetype6-dev \
       libzip-dev \
     ; \
     \
   docker-php-ext-configure gd \
-        --with-jpeg-dir=/usr \
-        --with-png-dir=/usr \
-    --with-freetype-dir=/usr \
+        --with-jpeg=/usr \
+    --with-freetype=/usr \
   ; \
   \
     docker-php-ext-install -j "$(nproc)" \
