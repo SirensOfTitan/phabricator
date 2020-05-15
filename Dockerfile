@@ -1,5 +1,5 @@
 ##### Start Phabricator
-FROM php:7.3-apache-buster
+FROM php:7.4-fpm-buster
 ##### End Phabricator
 
 # Required Components
@@ -22,11 +22,6 @@ RUN apt-get update \
 
 # install the PHP extensions we need
 RUN set -ex; \
-    \
-    if command -v a2enmod; then \
-        a2enmod rewrite; \
-    fi; \
-    \
     savedAptMark="$(apt-mark showmanual)"; \
     \
     apt-get update; \
@@ -34,20 +29,19 @@ RUN set -ex; \
       libcurl4-gnutls-dev \
       libjpeg62-turbo-dev \
       libpng-dev \
+      libonig-dev \
       libfreetype6-dev \
       libzip-dev \
     ; \
     \
   docker-php-ext-configure gd \
-        --with-jpeg-dir=/usr \
-        --with-png-dir=/usr \
-    --with-freetype-dir=/usr \
+        --with-jpeg=/usr \
+    --with-freetype=/usr \
   ; \
   \
     docker-php-ext-install -j "$(nproc)" \
     gd \
     opcache \
-    mbstring \
     iconv \
     mysqli \
     curl \
@@ -99,18 +93,6 @@ RUN { \
 # Repository Folder.
 RUN mkdir /var/repo \
   && chown www-data:www-data /var/repo
-
-##### Start Phabricator
-ENV APACHE_DOCUMENT_ROOT /var/www/phabricator/webroot
-
-RUN { \
-        echo '<VirtualHost *:80>'; \
-        echo '  DocumentRoot ${APACHE_DOCUMENT_ROOT}'; \
-        echo '  RewriteEngine on'; \
-        echo '  RewriteRule ^(.*)$ /index.php?__path__=$1 [B,L,QSA]'; \
-        echo '</VirtualHost>'; \
-    } > /etc/apache2/sites-available/000-default.conf
-##### End Phabricator
 
 COPY ./ /var/www
 
