@@ -15,6 +15,7 @@ jobs:
       with:
         username: ${{ Secrets.DOCKER_USERNAME }}
         password: ${{ Secrets.DOCKER_PASSWORD }}
+        tags: latest
         repository: cole2026/phabricator
         tag_with_sha: true
         dockerfile: Dockerfile
@@ -23,6 +24,7 @@ jobs:
       with:
         username: ${{ Secrets.DOCKER_USERNAME }}
         password: ${{ Secrets.DOCKER_PASSWORD }}
+        tags: latest
         repository: cole2026/phabricator-daemon
         tag_with_sha: true
         dockerfile: Dockerfile.daemon
