@@ -13,16 +13,16 @@ jobs:
     - uses: docker/build-push-action@v1.1.0
       name: Build and push phabricator
       with:
-        username: ${{ Secrets.DockerUsername }}
-        password: ${{ Secrets.DockerPassword }}
+        username: ${{ Secrets.DOCKER_USERNAME }}
+        password: ${{ Secrets.DOCKER_PASSWORD }}
         repository: cole2026/phabricator
         tag_with_sha: true
         dockerfile: Dockerfile
     - uses: docker/build-push-action@v1.1.0
-      name: Build and push phabricator
+      name: Build and push phabricator-daemon
       with:
-        username: ${{ Secrets.DockerUsername }}
-        password: ${{ Secrets.DockerPassword }}
+        username: ${{ Secrets.DOCKER_USERNAME }}
+        password: ${{ Secrets.DOCKER_PASSWORD }}
         repository: cole2026/phabricator-daemon
         tag_with_sha: true
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile.daemon
