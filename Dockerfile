@@ -98,6 +98,9 @@ COPY ./ /var/www
 
 WORKDIR /var/www
 
-RUN git submodule update --init --recursive
+RUN git submodule update --init --recursive --depth 1\
+        && rm -rf .git \
+        && rm -rf phabricator/.git \
+        && rm -rf arcanist/.git
 
 ENV PATH "$PATH:/var/www/phabricator/bin"
