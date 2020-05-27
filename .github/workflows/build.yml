@@ -1,12 +1,8 @@
-name: Docker Build
-
+name: Docker Build and Push
 on:
-  pull_request:
   push:
-    branches:
+    branches: 
       - master
-      - stable
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,9 +10,21 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
-    - name: phabricator
-      run: docker build -f ./Dockerfile ./
-    - name: daemon
-      run: docker build -f ./Dockerfile.daemon ./
-    - name: aphlict
-      run: docker build -f ./Dockerfile.aphlict ./
+    - uses: docker/build-push-action@v1.1.0
+      name: Build and push phabricator
+      with:
+        username: ${{ Secrets.DOCKER_USERNAME }}
+        password: ${{ Secrets.DOCKER_PASSWORD }}
+        tags: latest
+        repository: cole2026/phabricator
+        tag_with_sha: true
+        dockerfile: Dockerfile
+    - uses: docker/build-push-action@v1.1.0
+      name: Build and push phabricator-daemon
+      with:
+        username: ${{ Secrets.DOCKER_USERNAME }}
+        password: ${{ Secrets.DOCKER_PASSWORD }}
+        tags: latest
+        repository: cole2026/phabricator-daemon
+        tag_with_sha: true
+        dockerfile: Dockerfile.daemon
